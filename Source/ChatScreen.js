@@ -1,23 +1,79 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import Api from './Components/Api';
+import {postData, getData} from './Components/ApiService';
 
-export default function ChatScreen({ route, navigation }) {
-  const { userId, username } = route.params;  // Access the userId and username passed from HomeScreen
+export default function ChatScreen({route, navigation}) {
+  const {userId, username, receiverId} = route.params; // Access senderId, receiverId, and username
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]); // To store sent messages
-
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   // Handle input change
-  const handleMessageChange = (text) => {
+  const handleMessageChange = text => {
     setMessage(text);
   };
 
-  // Handle send button press
-  const handleSend = () => {
+  const handleSend = async () => {
     if (message.trim()) {
-      // Add the message to the list of messages
-      setMessages([...messages, { text: message, isUserMessage: true }]);
-      setMessage(''); // Clear the input after sending the message
+      const payload = {
+        senderId: userId, // Current logged-in user
+        receiverId: receiverId, // Receiver's ID
+        message: message,
+      };
+  
+      console.log('Sending message with payload:', payload); // Log the message payload
+  
+      try {
+        const response = await postData(Api.SEND_MESSAGE, payload);
+        console.log('Response from backend:', response); // Log the response from the backend
+        if (response.message === 'Message sent successfully!') {
+          // Add the new message directly to the state without relying on the previous state
+          setMessages(prevMessages => [
+            ...prevMessages,
+            { message, isUserMessage: true, timestamp: new Date() },
+          ]);
+          setMessage(''); // Clear the input after sending the message
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
+  };
+  
+  const fetchMessages = async () => {
+    try {
+      const params = { senderId: userId, receiverId: receiverId };
+      console.log('Params:', params); // Log the params to verify they are correct
+      const url = `http://localhost:5000${Api.GET_MESSAGES}?senderId=${userId}&receiverId=${receiverId}`;
+      const response = await getData(Api.GET_MESSAGES, params);
+      console.log('Fetched data:', response);
+      setMessages(response); 
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setIsLoading(false); // Stop loading if there's an error
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchMessages(); // Fetch the messages when the screen loads
+    console.log('Messages inside useEffect:', messages); 
+  }, [userId, receiverId]); // Ensure the effect runs when userId or receiverId changes
+
+  // Helper function to format the timestamp
+  const formatTimestamp = timestamp => {
+    const date = new Date(timestamp);
+    return date.toLocaleString(); // You can format this as needed
   };
 
   return (
@@ -29,22 +85,46 @@ export default function ChatScreen({ route, navigation }) {
         </TouchableOpacity>
         <Text style={styles.username}>{username}</Text>
       </View>
-
-      {/* Chat content */}
-      <ScrollView style={styles.chatContainer}>
-        {messages.map((msg, index) => (
-          <View
-            key={index}
-            style={[
-              styles.messageContainer,
-              msg.isUserMessage ? styles.userMessage : styles.otherMessage,
-            ]}
-          >
-            <Text style={styles.message}>{msg.text}</Text>
-          </View>
-        ))}
+{/* <ScrollView style={styles.chatContainer}>
+  {messages && messages.length > 0 ? (
+    messages.map((msg, index) => (
+      <View
+        key={index}
+        style={[
+          styles.messageContainer,
+          msg.isUserMessage ? styles.userMessage : styles.otherMessage,
+        ]}
+      >
+        <Text style={styles.message}>{msg.message}</Text>
+        <Text style={styles.timestamp}>
+          {formatTimestamp(msg.timestamp)}
+        </Text>
+      </View>
+    ))
+  ) : (
+    <Text>No messages</Text> // Display a message when no messages are available
+  )}
+</ScrollView> */}
+ <ScrollView style={styles.chatContainer}>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#007bff" /> // Loader while fetching messages
+        ) : messages.length > 0 ? (
+          messages.map((msg, index) => (
+            <View
+              key={index}
+              style={[
+                styles.messageContainer,
+                msg.isUserMessage ? styles.userMessage : styles.otherMessage,
+              ]}
+            >
+              <Text style={styles.message}>{msg.message}</Text>
+              <Text style={styles.timestamp}>{formatTimestamp(msg.timestamp)}</Text>
+            </View>
+          ))
+        ) : (
+          <Text>No messages</Text> // Display "No messages" if there are no messages
+        )}
       </ScrollView>
-
       {/* Text Input */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -55,7 +135,10 @@ export default function ChatScreen({ route, navigation }) {
           placeholderTextColor="#ccc"
         />
         <TouchableOpacity onPress={handleSend}>
-          <Image source={require('../Src/Icon/send.png')} style={styles.sendIcon} />
+          <Image
+            source={require('../Src/Icon/send.png')}
+            style={styles.sendIcon}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -101,12 +184,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
   },
   otherMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#f1f1f1',
+    alignSelf: 'flex-end',
+    backgroundColor: '#007bff',
   },
   message: {
     fontSize: 16,
     color: '#fff', // White for user message
+  },
+  timestamp: {
+    fontSize: 12,
+    color: '#ccc',
+    marginTop: 5,
   },
   inputContainer: {
     flexDirection: 'row',

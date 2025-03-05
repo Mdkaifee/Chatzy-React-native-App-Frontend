@@ -21,7 +21,7 @@ export default function App() {
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="AboutUs" component={AboutUs} />
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen } />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

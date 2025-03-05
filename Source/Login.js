@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert, StyleSheet, ActivityIndicator } from 'react-native';
-import { postData } from './Components/ApiService';  // Assuming you have postData function
-import Api from './Components/Api';  // Import your API endpoints
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import {postData} from './Components/ApiService'; // Assuming you have postData function
+import Api from './Components/Api'; // Import your API endpoints
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);  // To handle loading state
-
-  const saveToken = async (token) => {
-    try {
-      await AsyncStorage.setItem('authToken', token);  // Save token to AsyncStorage
-      console.log('Token saved successfully!', token);
-    } catch (error) {
-      console.error('Error saving token:', error);
-    }
-  };
+  const [loading, setLoading] = useState(false); // To handle loading state
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,34 +23,42 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    setLoading(true);  // Show loading indicator while the request is being processed
+    setLoading(true); // Show loading indicator while the request is being processed
 
     try {
-      console.log('Email:', email);  // Ensure email and password are correct
-      console.log('Password:', password);
-
-      const payload = { email, password };
+      const payload = {email, password};
 
       // Call API to handle login
       const response = await postData(Api.LOGIN, payload);
 
-      if (response.token) {
-        // Save the token after successful login
-        await saveToken(response.token);
-        AsyncStorage.setItem('isLoggedIn','true')
-        // Navigate to the TabNavigator after login
-        navigation.replace('Home'); // Replace the current screen with Home
+      if (response && response.token) {
+        // Save the token and userId to AsyncStorage
+        await AsyncStorage.setItem('token', response.token);
+        await AsyncStorage.setItem('userId', response.userId);
+        AsyncStorage.setItem('isLoggedIn', 'true');
+
+        // Navigate to Home screen after login
+        navigation.replace('Home');
+
+        // Log the token and userId after the response is handled
+        console.log(
+          'Sent token and userId to Home:',
+          response.token,
+          response.userId,
+        );
       } else {
-        Alert.alert('Login failed', response.errorMessage || 'An error occurred');
+        Alert.alert(
+          'Login failed',
+          response.errorMessage || 'An error occurred',
+        );
       }
     } catch (error) {
-      console.error('Login failed:', error);
       Alert.alert('Login failed', 'Please try again later');
     } finally {
-      setLoading(false);  // Hide loading indicator after the request completes
+      setLoading(false); // Hide loading indicator after the request completes
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -70,9 +77,12 @@ const LoginScreen = ({ navigation }) => {
       />
 
       {/* Login button */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={loading}>
         {loading ? (
-          <ActivityIndicator size="small" color="#fff" />  // Show loading spinner while request is in progress
+          <ActivityIndicator size="small" color="#fff" /> // Show loading spinner while request is in progress
         ) : (
           <Text style={styles.buttonText}>Login</Text>
         )}

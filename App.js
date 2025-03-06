@@ -8,6 +8,8 @@ import SignUp from './Source/SignUp';
 import Login from './Source/Login';
 import SplashScreen from './Source/SplashScreen';
 import ChatScreen from './Source/ChatScreen';
+import EditProfile from './Source/EditProfile';
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -22,6 +24,7 @@ export default function App() {
         <Stack.Screen name="AboutUs" component={AboutUs} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

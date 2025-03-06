@@ -49,6 +49,13 @@ export default function ProfileScreen({navigation}) {
         <Text>About Us</Text>
       </TouchableOpacity>
       <View style={styles.line} />
+      <TouchableOpacity
+        style={styles.changeProfileButton}
+        onPress={() => navigation.navigate('EditProfile')}>
+        <Image source={require('../Src/Icon/Profile.png')} style={styles.icon} />
+        <Text>Edit Profile</Text>
+      </TouchableOpacity>
+      <View style={styles.line} />
     </View>
   );
 }

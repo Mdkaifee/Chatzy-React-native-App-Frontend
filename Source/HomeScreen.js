@@ -65,6 +65,7 @@ export default function HomeScreen({navigation}) {
 
       {/* Display the list of users */}
       <FlatList
+      showsVerticalScrollIndicator={false}
         data={users}
         renderItem={renderItem}
         keyExtractor={item => item._id}

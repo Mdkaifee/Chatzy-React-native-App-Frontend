@@ -548,6 +548,7 @@ export default function ChatScreen({route, navigation}) {
 
       {/* Chat container */}
       <ScrollView 
+      showsVerticalScrollIndicator={false}
         style={styles.chatContainer} 
         ref={scrollViewRef} // Set ref for ScrollView
       >

@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { postData } from './Components/ApiService';
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {postData} from './Components/ApiService';
 import Api from './Components/Api';
 
-const SignUp = ({ navigation }) => {
+const SignUp = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,10 +17,15 @@ const SignUp = ({ navigation }) => {
 
   const handleSignUp = async () => {
     try {
-      const response = await postData(Api.SIGNUP, { name, email, password, mobile });
+      const response = await postData(Api.SIGNUP, {
+        name,
+        email,
+        password,
+        mobile,
+      });
       if (response.message) {
         alert('Signup successful!');
-        navigation.replace('Login');  // Navigate to LoginScreen
+        navigation.replace('Login'); // Navigate to LoginScreen
       }
     } catch (error) {
       console.error('Signup failed:', error);
@@ -26,41 +37,45 @@ const SignUp = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Name"
+        placeholderTextColor={'black'}
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={'black'}
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, {color: 'black'}]}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
+        placeholderTextColor={'black'}
         secureTextEntry
       />
       <TextInput
         style={styles.input}
         placeholder="Mobile"
         value={mobile}
+        placeholderTextColor={'black'}
         onChangeText={setMobile}
         maxLength={10}
       />
-      
+
       {/* Sign Up Button with TouchableOpacity */}
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
-     <View style={{ flexDirection: 'row', marginTop: 20 }}>
-             <Text>Already have an account?</Text>
-             <TouchableOpacity onPress={() => navigation.replace('Login')}>
-               <Text style={{ color: 'blue' }}>Login</Text>
-             </TouchableOpacity>
-           </View> 
+      <View style={{flexDirection: 'row', marginTop: 20}}>
+        <Text>Already have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.replace('Login')}>
+          <Text style={{color: 'blue'}}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -27,6 +27,7 @@ const LoginScreen = ({navigation}) => {
 
     try {
       const payload = {email, password};
+      console.log('Sending request with:', payload);
 
       // Call API to handle login
       const response = await postData(Api.LOGIN, payload);
@@ -64,13 +65,15 @@ const LoginScreen = ({navigation}) => {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={'black'}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, {color: 'black'}]}
         placeholder="Password"
+        placeholderTextColor={'black'}
         value={password}
         onChangeText={setPassword}
         secureTextEntry

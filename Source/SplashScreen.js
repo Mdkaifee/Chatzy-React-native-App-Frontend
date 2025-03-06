@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Alert, ImageBackground, StyleSheet } from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {View, Text, Alert, ImageBackground, StyleSheet} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default async function SplashScreen({ navigation }) {
+export default async function SplashScreen({navigation}) {
   const [isConnected, setIsConnected] = useState(null);
   const [message, setMessage] = useState('Chatzy SplashScreen');
   const hasCheckedLogin = useRef(false); // Track if the login check has been done
@@ -22,8 +22,13 @@ export default async function SplashScreen({ navigation }) {
           hasCheckedLogin.current = true; // Set flag to avoid repeated login checks
         }
       } else {
-        setMessage('No Internet Connection. Please connect to a stable network.');
-        Alert.alert('No Internet Connection', 'Please connect to a stable network.');
+        setMessage(
+          'No Internet Connection. Please connect to a stable network.',
+        );
+        Alert.alert(
+          'No Internet Connection',
+          'Please connect to a stable network.',
+        );
       }
     });
 
@@ -36,7 +41,10 @@ export default async function SplashScreen({ navigation }) {
 
     if (!state.isConnected) {
       setMessage('No Internet Connection. Please connect to a stable network.');
-      Alert.alert('No Internet Connection', 'Please connect to a stable network.');
+      Alert.alert(
+        'No Internet Connection',
+        'Please connect to a stable network.',
+      );
       return;
     } else {
       setMessage('Chatzy SplashScreen');
@@ -48,32 +56,33 @@ export default async function SplashScreen({ navigation }) {
       hasCheckedLogin.current = true; // Set flag to avoid repeated login checks
     }
   };
- 
+
   const checkIfLoggedIn = async () => {
     try {
       const token = await AsyncStorage.getItem('authToken');
       console.log('Token found:', token);
-  
+
       if (token) {
         console.log('Logged in token found at splash screen:', token);
         setTimeout(() => {
-          navigation.replace('Home');  // Navigate to Home if token exists
+          navigation.replace('Home'); // Navigate to Home if token exists
         }, 2000);
       } else {
         console.log('No token found, user is not logged in.');
         setTimeout(() => {
-          navigation.replace('Login');  // Navigate to Login if token does not exist
+          navigation.replace('Login'); // Navigate to Login if token does not exist
         }, 2000);
       }
     } catch (error) {
       console.error('Error checking login status:', error);
-      navigation.replace('Login');  // Navigate to Login if error occurs
+      navigation.replace('Login'); // Navigate to Login if error occurs
     }
   };
-  
-  
+
   return (
-    <ImageBackground source={require('../Src/Icon/image7.jpg')} style={styles.background}>
+    <ImageBackground
+      source={require('../Src/Icon/image7.jpg')}
+      style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.splashText}>{message}</Text>
       </View>

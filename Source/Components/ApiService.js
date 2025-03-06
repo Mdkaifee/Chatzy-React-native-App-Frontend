@@ -1,48 +1,5 @@
 import BASE_URL from './ApiConfig';
 
-// export const getData = async (ApiEndPoint) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}${ApiEndPoint}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error("Failed to fetch data:", error);
-//     throw error;
-//   }
-// };
-// export const getData = async (ApiEndPoint, params) => {
-//   try {
-//     // Construct the query string from the params object
-//     const queryString = new URLSearchParams(params).toString();
-
-//     const response = await fetch(`${BASE_URL}${ApiEndPoint}?${queryString}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error('Failed to fetch data:', error);
-//     throw error;
-//   }
-// };
 export const getData = async (ApiEndPoint, params) => {
   try {
     // Construct the query string from the params object

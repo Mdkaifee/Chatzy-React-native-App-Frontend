@@ -10,18 +10,16 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen({navigation}) {
-  
   const removeToken = async () => {
     try {
       console.log('Removing token...');
-      await AsyncStorage.removeItem('authToken');  // Ensure the key matches
+      await AsyncStorage.removeItem('authToken'); // Ensure the key matches
       console.log('Token removed successfully.');
-      navigation.replace('Login');  // Navigate to Login screen after removing token
+      navigation.replace('Login'); // Navigate to Login screen after removing token
     } catch (error) {
       console.error('Error removing token:', error);
     }
   };
-  
 
   const handleLogoutPress = () => {
     Alert.alert('Log Out', 'Are you sure you want to log out?', [

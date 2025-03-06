@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 
 const AboutUs = () => {
   return (
@@ -7,13 +14,24 @@ const AboutUs = () => {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>About Chatzy</Text>
         <Text style={styles.paragraph}>
-          <Text style={styles.boldText}>Chatzy</Text> is an innovative platform designed to streamline the management of your salon business. Our goal is to provide salon owners with the tools they need to efficiently manage staff schedules, appointments, and customer interactions, all in one place.
+          <Text style={styles.boldText}>Chatzy</Text> is an innovative platform
+          designed to streamline the management of your salon business. Our goal
+          is to provide salon owners with the tools they need to efficiently
+          manage staff schedules, appointments, and customer interactions, all
+          in one place.
         </Text>
         <Text style={styles.paragraph}>
-          With <Text style={styles.boldText}>Chatzy</Text>, you can easily onboard your salon staff, assign shifts, and ensure seamless operation throughout the day. Whether you're managing a single location or multiple salons, our app helps you stay organized, reduce no-shows, and provide a better experience for both your staff and customers.
+          With <Text style={styles.boldText}>Chatzy</Text>, you can easily
+          onboard your salon staff, assign shifts, and ensure seamless operation
+          throughout the day. Whether you're managing a single location or
+          multiple salons, our app helps you stay organized, reduce no-shows,
+          and provide a better experience for both your staff and customers.
         </Text>
         <Text style={styles.paragraph}>
-          Our mission is to empower salon owners to focus on what truly matters: delivering exceptional services to your clients while we handle the operational tasks. We're here to make your business run smoothly, allowing you to grow and thrive in a competitive industry.
+          Our mission is to empower salon owners to focus on what truly matters:
+          delivering exceptional services to your clients while we handle the
+          operational tasks. We're here to make your business run smoothly,
+          allowing you to grow and thrive in a competitive industry.
         </Text>
       </ScrollView>
 
